@@ -19,15 +19,15 @@ def match_controls(case, control_df, used_ids):
 
     return prioritized_controls
 
-def match_controls_to_cases(path_to_all_controls_file, path_to_dementia_file, 
+def match_controls_to_cases(control_df, dementia_df, 
                             dementia_age_cutoff_lower=45, dementia_age_cutoff_higher=85, 
                             num_controls=25, age_tolerance=1):
     """
     Matches controls to dementia cases based on gender and age criteria.
     
     Parameters:
-    - path_to_all_controls_file (str): Path to the CSV file containing all control data.
-    - path_to_dementia_file (str): Path to the CSV file containing dementia case data.
+    - control_df (DataFrame): Dataframe with all control data.
+    - dementia_df (DataFrame): Dataframe with dementia cases to match on.
     - dementia_age_cutoff_lower (int): Minimum age for dementia cases to consider.
     - dementia_age_cutoff_higher (int): Maximum age for dementia cases to consider.
     - num_controls (int): Number of controls to match per case.
@@ -36,9 +36,7 @@ def match_controls_to_cases(path_to_all_controls_file, path_to_dementia_file,
     Returns:
     - pd.DataFrame: A DataFrame with matched controls for each dementia case.
     """
-    control_df = pd.read_csv(path_to_all_controls_file)
     control_df['diagnosis'] = 0
-    dementia_df = pd.read_csv(path_to_dementia_file)
 
     # Filter dementia cases based on age range
     dementia_df_considered = dementia_df[
