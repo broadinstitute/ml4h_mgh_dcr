@@ -2,6 +2,15 @@ import pandas as pd
 from datetime import timedelta
 import numpy as np
 
+# Function to check if a person has dementia phenotype
+def has_dementia_phenotype(group):
+    dates = group['condition_start_date'].drop_duplicates().sort_values()
+    for i in range(len(dates)):
+        for j in range(i + 1, len(dates)):
+            if dates.iloc[j] <= dates.iloc[i] + timedelta(days=365):  # Check if within 12 months
+                return True
+    return False
+
 def process_dementia_data(path_to_dementia_file, path_to_demographics_file):
     """
     Process dementia and demographic data to identify individuals with a dementia phenotype
@@ -26,15 +35,6 @@ def process_dementia_data(path_to_dementia_file, path_to_demographics_file):
     # Group data by person_id
     dementia_groups = dementia_df.groupby('person_id')
 
-    # Define function to check if a person has dementia phenotype
-    def has_dementia_phenotype(group):
-        dates = group['condition_start_date'].drop_duplicates().sort_values()
-        for i in range(len(dates)):
-            for j in range(i + 1, len(dates)):
-                if dates.iloc[j] <= dates.iloc[i] + timedelta(days=365):  # Check if within 12 months
-                    return True
-        return False
-
     # Filter person_ids with dementia phenotype
     dementia_person_ids = dementia_groups.filter(has_dementia_phenotype)['person_id'].unique()
     dementia_pdf = dementia_df[dementia_df['person_id'].isin(dementia_person_ids)].reset_index(drop=True)
@@ -51,6 +51,7 @@ def process_dementia_data(path_to_dementia_file, path_to_demographics_file):
     dementia_pdf['condition_start_age'] = (dementia_pdf['condition_start_date'] - dementia_pdf['DOB']).apply(lambda x: x.days // 365.24)
 
     return dementia_pdf
+
 
 
 
