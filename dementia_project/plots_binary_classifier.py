@@ -7,7 +7,7 @@ from sklearn.metrics import (
 )
 from itertools import product
 
-def plot_roc_curve(final_model, X_test_final_scaled, y_test, title, labels=['No dementia', 'Dementia']):
+def plot_roc_curve(final_model, X_test_final_scaled, y_test, title, labels, save_path):
     """
     Plots the ROC curve for a binary classifier model.
 
@@ -17,6 +17,7 @@ def plot_roc_curve(final_model, X_test_final_scaled, y_test, title, labels=['No 
     - y_test: Binary matrix for test labels (one-hot encoded).
     - title: Title for the plot.
     - labels: Class labels for the legend.
+    - save_path: path to save the figure.
     """
     colors = ['green', 'blue']
     plt.figure(figsize=(8, 6))
@@ -38,9 +39,12 @@ def plot_roc_curve(final_model, X_test_final_scaled, y_test, title, labels=['No 
     plt.title(title)
     plt.legend(loc="lower right")
     plt.grid(True)
-    plt.show()
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()
 
-def plot_precision_recall_curve(final_model, X_test_final_scaled, y_test, title, labels=['No dementia', 'Dementia']):
+def plot_precision_recall_curve(final_model, X_test_final_scaled, y_test, title, labels, save_path):
     """
     Plots the Precision-Recall curve for a binary classifier model.
 
@@ -50,6 +54,7 @@ def plot_precision_recall_curve(final_model, X_test_final_scaled, y_test, title,
     - y_test: Binary matrix for test labels (one-hot encoded).
     - title: Title for the plot.
     - labels: Class labels for the legend.
+    - save_path: path to save the figure.
     """
     colors = ['green', 'blue']
     plt.figure(figsize=(8, 6))
@@ -68,9 +73,12 @@ def plot_precision_recall_curve(final_model, X_test_final_scaled, y_test, title,
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.grid(True)
-    plt.show()
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()
 
-def plot_confusion_matrix(cm, classes, title, cmap=plt.cm.Blues):
+def plot_confusion_matrix(cm, classes, title, cmap, save_path):
     """
     Plots a confusion matrix with colored annotations.
 
@@ -78,7 +86,8 @@ def plot_confusion_matrix(cm, classes, title, cmap=plt.cm.Blues):
     - cm: Confusion matrix (2x2 array).
     - classes: Class labels for the plot axes.
     - title: Title for the plot.
-    - cmap: Color map for the plot (default is Blues).
+    - cmap: Color map for the plot.
+    - save_path: path to save the figure.
     """
     plt.figure(figsize=(6, 6))
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -98,5 +107,8 @@ def plot_confusion_matrix(cm, classes, title, cmap=plt.cm.Blues):
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.show()
+    if save_path:
+        plt.savefig(save_path)
+    else:
+        plt.show()
 
