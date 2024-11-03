@@ -8,14 +8,24 @@ from dementia_cohort import process_dementia_data
 from control_matching import match_controls_to_cases
 from model import logistic_regression, model_summary
 from plots_binary_classifier import plot_roc_curve, plot_precision_recall_curve, plot_confusion_matrix
+from sklearn.metrics import (
+    roc_curve, auc, precision_recall_curve, average_precision_score, 
+    confusion_matrix, classification_report
+)
+import matplotlib.pyplot as plt
 
 def main(args):
     # Create output directory if it doesn't exist
     os.makedirs(args.output_dir, exist_ok=True)
 
     # Load and process dementia data
-    dementia_df = process_dementia_data(args.dementia_file, args.demographics_file)
+    dementia_df,fps = process_dementia_data(args.dementia_file, args.demographics_file)
+    dementia_df['gender'] = dementia_df['gender'].apply(lambda x: 'F' if x=='F:Female' else 'M')
+
     control_df_all = pd.read_csv(args.controls_file)
+    control_df_all = control_df_all.rename(columns = {'sex':'gender','patient_num':'person_id'})
+    control_df_all = control_df_all[~control_df_all['person_id'].isin(fps)]
+    control_df_all = control_df_all[control_df_all['gender'].isin(['F','M'])].reset_index(drop=True)
 
     # Match controls
     matched_df = match_controls_to_cases(
@@ -31,6 +41,9 @@ def main(args):
     
     dementia_df_considered['age_model'] = dementia_df_considered['age'] - args.prediction_range
     matched_df['age_model'] = matched_df['age'] - args.prediction_range
+    
+    matched_df['diagnosis'] = 0
+    dementia_df_considered['diagnosis'] =1
 
     # Create wide file for modeling
     wide_df = pd.concat([dementia_df_considered[args.columns_for_wide_file], matched_df[args.columns_for_wide_file]], ignore_index=True)

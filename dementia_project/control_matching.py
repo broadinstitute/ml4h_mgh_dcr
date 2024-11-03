@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Helper function to match controls for a single case
-def match_controls(case, control_df, used_ids):
+def match_controls(case, control_df, used_ids, age_tolerance, num_controls):
     matched_controls = control_df[
         (control_df['gender'] == case['gender']) &
         (control_df['age'] >= case['condition_start_age'] - age_tolerance) &
@@ -52,7 +52,7 @@ def match_controls_to_cases(control_df, dementia_df,
 
     # Perform matching for each dementia case
     for _, case in dementia_df_considered.iterrows():
-        matched_controls = match_controls(case, control_df, used_ids)
+        matched_controls = match_controls(case, control_df, used_ids, age_tolerance, num_controls)
         used_ids.update(matched_controls['person_id'])  # Track used controls to avoid duplicates
         matched_df = pd.concat([matched_df, matched_controls])
 
@@ -60,5 +60,4 @@ def match_controls_to_cases(control_df, dementia_df,
     matched_df.reset_index(drop=True, inplace=True)
     
     return matched_df
-
 

@@ -27,6 +27,8 @@ def process_dementia_data(path_to_dementia_file, path_to_demographics_file):
     # Read data files
     dementia_df = pd.read_csv(path_to_dementia_file)
     dem_df = pd.read_csv(path_to_demographics_file)
+    dem_df['DOB'] = dem_df.apply(lambda x: str(x['year_of_birth'])+'-'+str(x['month_of_birth'])+\
+                                       '-'+str(x['day_of_birth']),axis = 1)
 
     # Convert condition start date to datetime and sort values
     dementia_df['condition_start_date'] = pd.to_datetime(dementia_df['condition_start_date'])
@@ -50,8 +52,7 @@ def process_dementia_data(path_to_dementia_file, path_to_demographics_file):
     # Calculate age at condition start
     dementia_pdf['condition_start_age'] = (dementia_pdf['condition_start_date'] - dementia_pdf['DOB']).apply(lambda x: x.days // 365.24)
 
-    return dementia_pdf
-
+    return dementia_pdf, list(set(dementia_df['person_id']))
 
 
 

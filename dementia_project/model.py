@@ -21,4 +21,3 @@ def model_summary(model, X, y):
         '97.5% CI': np.exp(model_test.conf_int()).iloc[1:, 1].round(3)
     })
     return results_df
-
