@@ -1,0 +1,17 @@
+{
+  "commandLine": "/bin/bash -c \"source activate notes-ingest && python /app/ingest_parquet.py --input_dir /data/input --output_dir /data/output --temp_dir /data/temp > $AZ_BATCH_TASK_WORKING_DIR/stdout 2>$AZ_BATCH_TASK_WORKING_DIR/stderr \"",
+  "containerSettings": {
+    "imageName": "ml4hregistry.azurecr.io/notes-ingest:latest",
+    "containerRunOptions": "--volume /data:/data"
+  },
+  "userIdentity": {
+    "autoUser": {
+      "scope": "task",
+      "elevationLevel": "admin"
+    }
+  },
+  "id": "",
+  "resourceFiles": [],
+  "workingDirectory": "containerImageDefault",
+  "outputFiles": []
+}
