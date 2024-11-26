@@ -1,0 +1,11 @@
+{
+  "commandLine": "/bin/bash -c \"echo $AZ_BATCH_TASK_WORKING_DIR && mkdir phiReference && mv ./{Popular_Baby_Names.csv,ma_cities_towns_counties.txt,names_white_list.txt,top_5k_surnames.csv} phiReference && ls -lh $AZ_BATCH_TASK_WORKING_DIR/ && source activate jedi && python /app/jedi/phi_min/run_pMask.py --dir $AZ_BATCH_TASK_WORKING_DIR --notes_files Car End Pul Hnp Opn Rad Dis Mic Pat\"",
+  "containerSettings": {
+    "imageName": "ml4hregistry.azurecr.io/phimin:latest"
+  },
+  "id": "",
+  "resourceFiles": [],
+  "workingDirectory": "containerImageDefault",
+  "outputFiles": []
+}
+
